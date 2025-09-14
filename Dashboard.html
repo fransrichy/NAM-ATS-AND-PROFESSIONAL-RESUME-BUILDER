@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAM ATS AND PRO RESUME BUILDER</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- html2pdf.js for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .resume-page {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            padding: 2.5rem;
+            min-height: 1122px; /* A4 size height */
+            width: 794px; /* A4 size width */
+        }
+        @media (max-width: 1024px) {
+            .resume-page {
+                width: 100%;
+                min-height: auto;
+                padding: 1.5rem;
+            }
+        }
+        
+        /* New CSS for a clean PDF export */
+        .pdf-export {
+            background-color: white !important;
+        }
+        .pdf-export .resume-page {
+            box-shadow: none !important;
+            padding: 0 !important;
+            width: 100% !important;
+        }
+        .pdf-export .hidden-on-print {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Common Header -->
+    <nav class="w-full flex justify-between items-center py-4 px-6 relative z-10 bg-white shadow-sm hidden-on-print">
+        <!-- Logo with a link to the home page -->
+        <a href="index.html" class="flex items-center space-x-2">
+            <img src="logo.png" alt="NAM ATS RESUME Logo" class="rounded-full">
+            <span class="text-xl font-bold text-indigo-600">NAM ATS & PROFESSIONAL RESUME</span>
+        </a>
+        <!-- Download PDF button (desktop view) -->
+        <div class="hidden md:flex items-center space-x-4">
+            <button id="download-btn-nav" class="bg-green-600 text-white font-semibold py-2 px-6 rounded-full shadow-md hover:bg-green-700 transition-colors">Download PDF</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container (Dashboard) -->
+    <main class="flex-grow flex flex-col lg:flex-row bg-gray-100">
+        <!-- Left Column: Form and controls -->
+        <div class="lg:w-1/2 p-6 md:p-10 lg:p-16 overflow-y-auto hidden-on-print">
+            <h1 class="text-3xl font-bold text-indigo-600 mb-4">NAM ATS AND PROFESSIONAL RESUME BUILDER</h1>
+            <p class="text-gray-600 mb-8">Fill out the steps below to create your professional, ATS-friendly resume.</p>
+
+            <!-- Progress Indicator -->
+            <div class="flex items-center justify-between text-center mb-8">
+                <div class="flex flex-col items-center flex-1">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-indigo-600 text-white bg-indigo-600 font-bold transition-colors duration-300 step-dot active-dot" data-step="1">1</div>
+                    <span class="text-sm mt-2 text-indigo-600 font-medium">Contact</span>
+                </div>
+                <div class="flex-1 border-t-2 border-gray-300 mx-2 transition-colors duration-300 step-line"></div>
+                <div class="flex flex-col items-center flex-1">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-gray-300 text-gray-500 font-bold bg-white transition-colors duration-300 step-dot" data-step="2">2</div>
+                    <span class="text-sm mt-2 text-gray-500">Summary</span>
+                </div>
+                <div class="flex-1 border-t-2 border-gray-300 mx-2 transition-colors duration-300 step-line"></div>
+                <div class="flex flex-col items-center flex-1">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-gray-300 text-gray-500 font-bold bg-white transition-colors duration-300 step-dot" data-step="3">3</div>
+                    <span class="text-sm mt-2 text-gray-500">Experience</span>
+                </div>
+                <div class="flex-1 border-t-2 border-gray-300 mx-2 transition-colors duration-300 step-line"></div>
+                <div class="flex flex-col items-center flex-1">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-gray-300 text-gray-500 font-bold bg-white transition-colors duration-300 step-dot" data-step="4">4</div>
+                    <span class="text-sm mt-2 text-gray-500">Education</span>
+                </div>
+                <div class="flex-1 border-t-2 border-gray-300 mx-2 transition-colors duration-300 step-line"></div>
+                <div class="flex flex-col items-center flex-1">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-gray-300 text-gray-500 font-bold bg-white transition-colors duration-300 step-dot" data-step="5">5</div>
+                    <span class="text-sm mt-2 text-gray-500">Projects</span>
+                </div>
+                <div class="flex-1 border-t-2 border-gray-300 mx-2 transition-colors duration-300 step-line"></div>
+                <div class="flex flex-col items-center flex-1">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-gray-300 text-gray-500 font-bold bg-white transition-colors duration-300 step-dot" data-step="6">6</div>
+                    <span class="text-sm mt-2 text-gray-500">Skills</span>
+                </div>
+            </div>
+
+            <!-- Multi-step form -->
+            <form id="resume-form" class="space-y-8">
+                <!-- Step 1: Contact Information -->
+                <div id="step-1" class="step">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">1. Contact Information</h2>
+                    <div class="flex flex-col items-center space-y-4 mb-6">
+                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-200 flex items-center justify-center" id="profile-picture-preview">
+                            <span class="text-gray-500 text-center text-sm">Upload Photo</span>
+                            <img src="" alt="Profile Picture" class="w-full h-full object-cover hidden" id="preview-img">
+                        </div>
+                        <input type="file" id="profile-picture-input" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors"/>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="full-name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input type="text" id="full-name" name="fullName" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 transition-colors">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                            <input type="email" id="email" name="email" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 transition-colors">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 transition-colors">
+                        </div>
+                        <div>
+                            <label for="location" class="block text-sm font-medium text-gray-700">Location (City, State/Country)</label>
+                            <input type="text" id="location" name="location" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="links" class="block text-sm font-medium text-gray-700">Professional Links (LinkedIn, GitHub etc.)</label>
+                            <input type="text" id="links" name="links" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Professional Summary -->
+                <div id="step-2" class="step hidden">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">2. Professional Summary</h2>
+                    <div>
+                        <label for="summary" class="block text-sm font-medium text-gray-700">Professional Summary</label>
+                        <textarea id="summary" name="summary" rows="5" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 transition-colors"></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 3: Work Experience -->
+                <div id="step-3" class="step hidden">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">3. Work Experience</h2>
+                    <div id="work-experience-container" class="space-y-6">
+                        <!-- Work experience sections will be added here dynamically -->
+                    </div>
+                    <button type="button" id="add-work-btn" class="mt-4 inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Add Work Experience
+                    </button>
+                </div>
+
+                <!-- Step 4: Education -->
+                <div id="step-4" class="step hidden">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">4. Education</h2>
+                    <div id="education-container" class="space-y-6">
+                        <!-- Education sections will be added here dynamically -->
+                    </div>
+                    <button type="button" id="add-education-btn" class="mt-4 inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Add Education
+                    </button>
+                </div>
+                
+                <!-- Step 5: Projects -->
+                <div id="step-5" class="step hidden">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">5. Projects</h2>
+                    <div id="projects-container" class="space-y-6">
+                        <!-- Project sections will be added here dynamically -->
+                    </div>
+                    <button type="button" id="add-project-btn" class="mt-4 inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Add Project
+                    </button>
+                </div>
+
+                <!-- Step 6: Skills -->
+                <div id="step-6" class="step hidden">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">6. Skills</h2>
+                    <div>
+                        <label for="skills" class="block text-sm font-medium text-gray-700">Skills (separate with commas)</label>
+                        <input type="text" id="skills" name="skills" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 transition-colors">
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between mt-8">
+                    <button type="button" id="prev-btn" class="px-8 py-3 rounded-full shadow-md text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hidden">
+                        Previous
+                    </button>
+                    <button type="button" id="next-btn" class="px-8 py-3 rounded-full shadow-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Next
+                    </button>
+                    <button type="button" id="generate-btn" class="px-8 py-3 rounded-full shadow-md text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hidden">
+                        Generate PDF
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Column: Live Resume Preview -->
+        <div class="hidden lg:flex w-1/2 p-6 md:p-10 lg:p-16 flex-col items-center">
+            <div class="w-full flex justify-between items-center mb-4 hidden-on-print">
+                <h2 class="text-2xl font-bold text-gray-800">Live Preview</h2>
+                <div class="flex items-center space-x-2">
+                    <label for="template-select" class="text-sm font-medium text-gray-700">Template:</label>
+                    <select id="template-select" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2">
+                        <option value="professional">Professional</option>
+                        <option value="ats">ATS Plain</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="resume-preview-container" class="resume-page overflow-y-auto">
+                <div id="resume-preview">
+                    <!-- Resume content will be dynamically generated here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Common Footer -->
+    <footer class="bg-gray-800 text-white py-6 text-center hidden-on-print">
+        <p class="text-sm">
+            <span class="font-bold">Prepared By:</span> Laureta Chinhundo
+            <span class="mx-2">|</span> 
+            <span class="font-bold">Grade:</span> 11C
+            <span class="mx-2">|</span> 
+            <span class="font-bold">Date:</span> August 2025
+            <span class="mx-2">|</span> 
+            <span class="font-bold">School Name:</span> Windhoek Technical High School
+        </p>
+        <p class="text-sm mt-2">&copy; 2024 NAM ATS RESUME. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('resume-form');
+            const steps = document.querySelectorAll('.step');
+            const stepDots = document.querySelectorAll('.step-dot');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const generateBtn = document.getElementById('generate-btn');
+            const resumePreview = document.getElementById('resume-preview');
+            const templateSelect = document.getElementById('template-select');
+            const profilePictureInput = document.getElementById('profile-picture-input');
+            const profilePicturePreview = document.getElementById('profile-picture-preview');
+            const previewImg = document.getElementById('preview-img');
+            const downloadBtnNav = document.getElementById('download-btn-nav');
+            const body = document.body;
+            
+            let currentStep = 0;
+            let profilePicUrl = null;
+
+            const updatePreview = () => {
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                
+                data.workExperiences = [];
+                document.querySelectorAll('.work-item').forEach(item => {
+                    data.workExperiences.push({
+                        company: item.querySelector('[name^="work-company"]').value,
+                        title: item.querySelector('[name^="work-title"]').value,
+                        city: item.querySelector('[name^="work-city"]').value,
+                        dates: item.querySelector('[name^="work-dates"]').value,
+                        bullets: item.querySelector('[name^="work-bullets"]').value
+                    });
+                });
+
+                data.educations = [];
+                document.querySelectorAll('.education-item').forEach(item => {
+                    data.educations.push({
+                        institution: item.querySelector('[name^="edu-institution"]').value,
+                        degree: item.querySelector('[name^="edu-degree"]').value,
+                        dates: item.querySelector('[name^="edu-dates"]').value
+                    });
+                });
+
+                data.projects = [];
+                document.querySelectorAll('.project-item').forEach(item => {
+                    data.projects.push({
+                        name: item.querySelector('[name^="project-name"]').value,
+                        tech: item.querySelector('[name^="project-tech"]').value,
+                        link: item.querySelector('[name^="project-link"]').value,
+                        description: item.querySelector('[name^="project-description"]').value
+                    });
+                });
+
+                const isAtsTemplate = templateSelect.value === 'ats';
+                let resumeHTML = '';
+                
+                if (isAtsTemplate) {
+                    resumeHTML = `
+                        <div class="p-6 text-gray-900 leading-relaxed font-mono">
+                            <div class="text-center mb-6">
+                                ${profilePicUrl ? `<img src="${profilePicUrl}" alt="Profile" class="w-24 h-24 mx-auto mb-4 rounded-full object-cover">` : ''}
+                                <h1 class="text-2xl font-bold uppercase">${data.fullName || 'Full Name'}</h1>
+                                <p class="text-sm">${data.location || ''} | ${data.phone || ''} | ${data.email || ''} | ${data.links || ''}</p>
+                            </div>
+                            
+                            ${data.summary ? `
+                            <div class="mb-6">
+                                <h2 class="text-lg font-bold border-b border-gray-400 pb-1 mb-2">PROFESSIONAL SUMMARY</h2>
+                                <p class="text-sm whitespace-pre-wrap">${data.summary}</p>
+                            </div>
+                            ` : ''}
+
+                            ${data.workExperiences.length > 0 ? `
+                            <div class="mb-6">
+                                <h2 class="text-lg font-bold border-b border-gray-400 pb-1 mb-2">WORK EXPERIENCE</h2>
+                                ${data.workExperiences.map(job => `
+                                    <div class="mb-4">
+                                        <h3 class="font-bold">${job.title || ''}</h3>
+                                        <p class="text-sm italic">${job.company || ''}, ${job.city || ''} | ${job.dates || ''}</p>
+                                        <p class="text-sm whitespace-pre-wrap mt-1">${job.bullets}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ` : ''}
+
+                            ${data.projects.length > 0 ? `
+                            <div class="mb-6">
+                                <h2 class="text-lg font-bold border-b border-gray-400 pb-1 mb-2">PROJECTS</h2>
+                                ${data.projects.map(project => `
+                                    <div class="mb-4">
+                                        <h3 class="font-bold">${project.name || ''}</h3>
+                                        <p class="text-sm italic">${project.tech || ''} | ${project.link || ''}</p>
+                                        <p class="text-sm whitespace-pre-wrap mt-1">${project.description}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ` : ''}
+
+                            ${data.educations.length > 0 ? `
+                            <div class="mb-6">
+                                <h2 class="text-lg font-bold border-b border-gray-400 pb-1 mb-2">EDUCATION</h2>
+                                ${data.educations.map(edu => `
+                                    <div class="mb-4">
+                                        <h3 class="font-bold">${edu.degree || ''}</h3>
+                                        <p class="text-sm italic">${edu.institution || ''} | ${edu.dates || ''}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ` : ''}
+
+                            ${data.skills ? `
+                            <div class="mb-6">
+                                <h2 class="text-lg font-bold border-b border-gray-400 pb-1 mb-2">SKILLS</h2>
+                                <p class="text-sm">${data.skills}</p>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                } else {
+                    // Professional Template
+                    resumeHTML = `
+                        <div class="p-6 text-gray-900">
+                            <div class="flex items-center mb-6">
+                                <div class="flex-grow">
+                                    <h1 class="text-4xl font-extrabold text-indigo-600">${data.fullName || 'Full Name'}</h1>
+                                    <p class="text-md text-gray-600 mt-1">${data.location || ''} | ${data.phone || ''} | ${data.email || ''}</p>
+                                    <p class="text-sm text-gray-500 mt-1">${data.links || ''}</p>
+                                </div>
+                                ${profilePicUrl ? `<img src="${profilePicUrl}" alt="Profile" class="w-28 h-28 ml-6 rounded-full object-cover">` : ''}
+                            </div>
+                            
+                            ${data.summary ? `
+                            <div class="mb-6">
+                                <h2 class="text-2xl font-bold border-b-2 border-indigo-600 pb-1 mb-4">Summary</h2>
+                                <p class="text-gray-700 leading-relaxed">${data.summary}</p>
+                            </div>
+                            ` : ''}
+                            
+                            ${data.workExperiences.length > 0 ? `
+                            <div class="mb-6">
+                                <h2 class="text-2xl font-bold border-b-2 border-indigo-600 pb-1 mb-4">Work Experience</h2>
+                                ${data.workExperiences.map(job => `
+                                    <div class="mb-4">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <h3 class="text-xl font-semibold text-gray-800">${job.title || ''}</h3>
+                                            <span class="text-sm text-gray-500">${job.dates || ''}</span>
+                                        </div>
+                                        <p class="text-md font-medium text-gray-600">${job.company || ''}, ${job.city || ''}</p>
+                                        <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
+                                            ${job.bullets ? job.bullets.split('\n').map(bullet => `<li>${bullet.trim()}</li>`).join('') : ''}
+                                        </ul>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ` : ''}
+
+                            ${data.projects.length > 0 ? `
+                            <div class="mb-6">
+                                <h2 class="text-2xl font-bold border-b-2 border-indigo-600 pb-1 mb-4">Projects</h2>
+                                ${data.projects.map(project => `
+                                    <div class="mb-4">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <h3 class="text-xl font-semibold text-gray-800">${project.name || ''}</h3>
+                                            <span class="text-sm text-gray-500">${project.tech || ''}</span>
+                                        </div>
+                                        <p class="text-md font-medium text-gray-600">${project.link || ''}</p>
+                                        <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
+                                            ${project.description ? project.description.split('\n').map(bullet => `<li>${bullet.trim()}</li>`).join('') : ''}
+                                        </ul>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ` : ''}
+                            
+                            ${data.educations.length > 0 ? `
+                            <div class="mb-6">
+                                <h2 class="text-2xl font-bold border-b-2 border-indigo-600 pb-1 mb-4">Education</h2>
+                                ${data.educations.map(edu => `
+                                    <div class="mb-4">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <h3 class="text-xl font-semibold text-gray-800">${edu.degree || ''}</h3>
+                                            <span class="text-sm text-gray-500">${edu.dates || ''}</span>
+                                        </div>
+                                        <p class="text-md font-medium text-gray-600">${edu.institution || ''}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ` : ''}
+
+                            ${data.skills ? `
+                            <div class="mb-6">
+                                <h2 class="text-2xl font-bold border-b-2 border-indigo-600 pb-1 mb-4">Skills</h2>
+                                <p class="text-gray-700">${data.skills}</p>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+                resumePreview.innerHTML = resumeHTML;
+            };
+
+            const showStep = (stepIndex) => {
+                steps.forEach((step, index) => {
+                    step.classList.add('hidden');
+                    if (index === stepIndex) {
+                        step.classList.remove('hidden');
+                    }
+                });
+                stepDots.forEach((dot, index) => {
+                    dot.classList.remove('text-indigo-600', 'border-indigo-600', 'bg-indigo-600');
+                    dot.classList.add('text-gray-500', 'border-gray-300', 'bg-white');
+                    dot.parentNode.querySelector('span').classList.remove('text-indigo-600');
+                    dot.parentNode.querySelector('span').classList.add('text-gray-500');
+
+                    if (index <= stepIndex) {
+                        dot.classList.remove('text-gray-500', 'border-gray-300', 'bg-white');
+                        dot.classList.add('text-white', 'border-indigo-600', 'bg-indigo-600');
+                        dot.parentNode.querySelector('span').classList.remove('text-gray-500');
+                        dot.parentNode.querySelector('span').classList.add('text-indigo-600');
+                    }
+                });
+                prevBtn.classList.toggle('hidden', stepIndex === 0);
+                nextBtn.classList.toggle('hidden', stepIndex === steps.length - 1);
+                generateBtn.classList.toggle('hidden', stepIndex !== steps.length - 1);
+            };
+
+            const addWorkExperience = () => {
+                const container = document.getElementById('work-experience-container');
+                const workItem = document.createElement('div');
+                workItem.classList.add('work-item', 'p-6', 'bg-white', 'rounded-xl', 'shadow-md', 'border', 'border-gray-200', 'space-y-4');
+                workItem.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Company Name</label>
+                            <input type="text" name="work-company[]" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Job Title</label>
+                            <input type="text" name="work-title[]" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">City/Location</label>
+                            <input type="text" name="work-city[]" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Dates (e.g., 2020 - Present)</label>
+                            <input type="text" name="work-dates[]" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Responsibilities & Achievements (bullet points)</label>
+                        <textarea name="work-bullets[]" rows="4" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+                    </div>
+                    <button type="button" class="remove-item-btn mt-2 text-sm text-red-600 hover:text-red-800">Remove</button>
+                `;
+                container.appendChild(workItem);
+            };
+
+            const addEducation = () => {
+                const container = document.getElementById('education-container');
+                const educationItem = document.createElement('div');
+                educationItem.classList.add('education-item', 'p-6', 'bg-white', 'rounded-xl', 'shadow-md', 'border', 'border-gray-200', 'space-y-4');
+                educationItem.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Institution</label>
+                            <input type="text" name="edu-institution[]" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Degree/Major</label>
+                            <input type="text" name="edu-degree[]" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Graduation Date (e.g., 2020)</label>
+                            <input type="text" name="edu-dates[]" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                    <button type="button" class="remove-item-btn mt-2 text-sm text-red-600 hover:text-red-800">Remove</button>
+                `;
+                container.appendChild(educationItem);
+            };
+
+            const addProject = () => {
+                const container = document.getElementById('projects-container');
+                const projectItem = document.createElement('div');
+                projectItem.classList.add('project-item', 'p-6', 'bg-white', 'rounded-xl', 'shadow-md', 'border', 'border-gray-200', 'space-y-4');
+                projectItem.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Project Name</label>
+                            <input type="text" name="project-name[]" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Technologies Used</label>
+                            <input type="text" name="project-tech[]" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700">Project Link (Optional)</label>
+                            <input type="url" name="project-link[]" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Description (bullet points)</label>
+                        <textarea name="project-description[]" rows="4" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+                    </div>
+                    <button type="button" class="remove-item-btn mt-2 text-sm text-red-600 hover:text-red-800">Remove</button>
+                `;
+                container.appendChild(projectItem);
+            };
+
+            const setupListeners = () => {
+                form.addEventListener('input', updatePreview);
+                templateSelect.addEventListener('change', updatePreview);
+                document.getElementById('add-work-btn').addEventListener('click', addWorkExperience);
+                document.getElementById('add-education-btn').addEventListener('click', addEducation);
+                document.getElementById('add-project-btn').addEventListener('click', addProject);
+                document.addEventListener('click', (event) => {
+                    if (event.target.classList.contains('remove-item-btn')) {
+                        event.target.closest('div').remove();
+                        updatePreview();
+                    }
+                });
+
+                profilePictureInput.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        profilePicUrl = URL.createObjectURL(file);
+                        previewImg.src = profilePicUrl;
+                        previewImg.classList.remove('hidden');
+                        profilePicturePreview.querySelector('span').classList.add('hidden');
+                        updatePreview();
+                    }
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    currentStep++;
+                    showStep(currentStep);
+                });
+
+                prevBtn.addEventListener('click', () => {
+                    currentStep--;
+                    showStep(currentStep);
+                });
+
+                const downloadPdf = () => {
+                    const element = document.getElementById('resume-preview-container');
+                    
+                    // Add the class to prepare for export
+                    body.classList.add('pdf-export');
+
+                    // Set up options for better rendering
+                    const options = {
+                        margin: 0,
+                        filename: 'my-resume.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2 },
+                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+
+                    html2pdf().set(options).from(element).save().then(() => {
+                        // Remove the class after export is complete
+                        body.classList.remove('pdf-export');
+                    });
+                };
+
+                generateBtn.addEventListener('click', downloadPdf);
+                downloadBtnNav.addEventListener('click', downloadPdf);
+            };
+
+            // Initial setup on page load
+            showStep(currentStep);
+            addWorkExperience();
+            addEducation();
+            addProject();
+            setupListeners();
+            updatePreview();
+        });
+    </script>
+</body>
+</html>
